@@ -1,0 +1,76 @@
+---
+name: Test Director
+port: <%= director_port %>
+mbus: nats://localhost:<%= nats_port %>
+
+logging:
+  level: DEBUG
+
+redis:
+  host: 127.0.0.1
+  port: <%= redis_port %>
+  password:
+
+dir: <%= sandbox_root %>/boshdir
+
+scheduled_jobs:
+  - command: SnapshotDeployments
+    schedule: '*/2 * * * * *'
+  - command: ScheduledBackup
+    schedule: '*/1 * * * * *'
+
+db: &bosh_db
+  adapter: <%= @database.adapter %>
+  database: <%= @database.db_name %>
+  # Settings are set to defaults since DbBackup
+  # currently does not support export without them
+  host: 127.0.0.1
+  port: <%= @database.port %>
+  user: <%= @database.username %>
+  password: <%= @database.password %>
+
+  # Failure to set `sslmode` will produce following error
+  # 'PG::Error: SSL error: decryption failed or bad record mac:'
+  sslmode: "disable"
+
+  connection_options:
+    max_connections: 32
+    pool_timeout: 10
+
+dns:
+  db: *bosh_db
+
+blobstore: &director_blobstore
+  provider: local
+  options:
+    blobstore_path: <%= blobstore_storage_dir %>
+
+backup_destination:
+  provider: local
+  options:
+    blobstore_path: <%= sandbox_root %>/backup_destination
+
+compiled_package_cache:
+  <<: *director_blobstore
+
+scan_and_fix:
+  auto_fix_stateful_nodes: <%= director_fix_stateful_nodes || false %>
+
+snapshots:
+  enabled: true
+
+cloud:
+  external_cpi:
+    enabled: <%= external_cpi_enabled || false %>
+    cpi_path: <%= external_cpi_config[:director_path] %>
+  plugin: dummy
+  properties:
+    nats: nats://localhost:<%= nats_port %>
+    dir: <%= cloud_storage_dir %>
+    agent:
+      type: <%= agent_type %>
+      blobstore:
+        <<: *director_blobstore
+      server:
+        host: 127.0.0.1
+        password:

@@ -1,0 +1,8 @@
+---
+name: director
+dependencies:
+- libpq
+- mysql
+- ruby
+files:
+- bosh/bosh-director/*.gem

@@ -1,0 +1,6 @@
+---
+builds:
+  fdda10ed729b564f1610424b6f5a869f12c7f8ad:
+    blobstore_id: rest/objects/4e4e78bca61e121004e4e7d51d950e050d308b5ca60b
+    version: 1
+    sha1: 19f7dc69ccddcd3a73d46702de5d1eb802f28cc0

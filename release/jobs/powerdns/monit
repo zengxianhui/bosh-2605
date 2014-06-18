@@ -1,0 +1,5 @@
+check process powerdns
+  with pidfile /var/vcap/sys/run/powerdns/pdns.pid
+  start program "/var/vcap/jobs/powerdns/bin/powerdns_ctl start"
+  stop program "/var/vcap/jobs/powerdns/bin/powerdns_ctl stop"
+  group vcap

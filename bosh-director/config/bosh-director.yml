@@ -1,0 +1,52 @@
+---
+name: Local Director
+port: 8080
+logging:
+  level: DEBUG
+redis:
+  host: 127.0.0.1
+  password:
+dir: /tmp/boshdir
+db:
+  adapter: sqlite
+  database: /tmp/director.db
+  max_connections: 32
+  pool_timeout: 10
+blobstore:
+  provider: simple
+  options:
+    endpoint: http://127.0.0.1:9999
+    user: admin
+    password: admin
+cloud:
+  plugin: vsphere
+  properties:
+    agent:
+      ntp:
+        - ntp01.las01.emcatmos.com
+      blobstore:
+        provider: simple
+        options:
+          endpoint: http://127.0.0.1:9999
+          user: admin
+          password: admin
+      server:
+        host: 127.0.0.1
+        password:
+    vcenters:
+      - host: localhost:10443
+        user: vmware
+        password:
+        datacenters:
+          - name: LAS01
+            vm_folder: BOSH_VMs
+            template_folder: BOSH_Templates
+            disk_path: BOSH_Disks
+            datastore_pattern: las01-san.*
+            clusters:
+              - Cluster01
+              - Cluster02
+              - Cluster03
+              - Cluster04
+              - Cluster05
+              - Cluster06

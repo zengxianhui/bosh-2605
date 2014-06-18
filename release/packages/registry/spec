@@ -1,0 +1,8 @@
+---
+name: registry
+dependencies:
+- libpq
+- mysql
+- ruby
+files:
+- bosh/bosh-registry/*.gem
